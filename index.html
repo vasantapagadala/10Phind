@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 5px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 5px;
+            margin-bottom: 5px;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #budgetStatus {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #budgetStatusText {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Budget Tracker</h1>
+    <form id="addItemForm">
+        <input type="text" id="itemName" placeholder="Item name">
+        <input type="number" id="itemAmount" placeholder="Amount">
+        <button type="submit">Add Item</button>
+    </form>
+    <ul id="itemList"></ul>
+    <div id="budgetStatus">
+        <p>Total Budget: <span id="totalBudget">0</span></p>
+        <p>Status: <span id="budgetStatusText">Neutral</span></p>
+    </div>
+    <script>
+        document.getElementById('addItemForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const itemName = document.getElementById('itemName').value;
+            const itemAmount = parseFloat(document.getElementById('itemAmount').value);
+            if (itemName && !isNaN(itemAmount)) {
+                addItem(itemName, itemAmount);
+                document.getElementById('itemName').value = '';
+                document.getElementById('itemAmount').value = '';
+            }
+        });
+
+        function addItem(name, amount) {
+            const li = document.createElement('li');
+            li.textContent = `${name}: ${amount}`;
+            document.getElementById('itemList').appendChild(li);
+            updateBudget(amount);
+        }
+
+        function updateBudget(amount) {
+            const totalBudget = document.getElementById('totalBudget');
+            const currentTotal = parseFloat(totalBudget.textContent);
+            totalBudget.textContent = (currentTotal + amount).toFixed(2);
+            updateStatus(currentTotal + amount);
+        }
+
+        function updateStatus(total) {
+            const statusText = document.getElementById('budgetStatusText');
+            if (total > 0) {
+                statusText.textContent = 'Positive';
+                statusText.style.color = 'green';
+            } else if (total < 0) {
+                statusText.textContent = 'Negative';
+                statusText.style.color = 'red';
+            } else {
+                statusText.textContent = 'Neutral';
+                statusText.style.color = 'black';
+            }
+        }
+    </script>
+</body>
+</html>
